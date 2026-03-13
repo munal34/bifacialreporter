@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bifacial PV Mounting Decision Report</title>
+  <style>
+:root {
+  --bg: #f7f9fb;
+  --surface: #ffffff;
+  --ink: #10212b;
+  --ink-soft: #3f5563;
+  --muted: #637786;
+  --line: #d6dfe6;
+  --accent: #0e4f70;
+  --accent-soft: #e9f3f8;
+  --positive: #1b7d55;
+  --warning: #9b6b1c;
+  --negative: #a93b3b;
+  --radius: 10px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+  --shadow: 0 4px 16px rgba(16, 33, 43, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  color: var(--ink);
+  background: var(--bg);
+  font-family: "Segoe UI", "Calibri", "Noto Sans", "Arial", sans-serif;
+  line-height: 1.45;
+  font-size: 11pt;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+h1 { font-size: 28px; font-weight: 700; }
+h2 { font-size: 20px; font-weight: 700; margin-bottom: var(--space-3); }
+h3 { font-size: 14px; font-weight: 700; margin-bottom: var(--space-2); }
+h4 { font-size: 12px; font-weight: 700; margin-bottom: var(--space-1); }
+
+p {
+  margin: 0 0 var(--space-3) 0;
+  color: var(--ink-soft);
+}
+
+small, .small {
+  font-size: 9pt;
+  color: var(--muted);
+}
+
+.mono {
+  font-family: "Consolas", "Courier New", monospace;
+}
+
+.report-root {
+  width: 210mm;
+  margin: 0 auto;
+  padding: 12mm;
+}
+
+.page {
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid #ecf1f5;
+  padding: 12mm;
+  margin-bottom: 10mm;
+}
+
+.cover-page {
+  min-height: 273mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(160deg, #f8fbfd 0%, #ffffff 38%, #eef5fa 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.cover-page::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  right: -60px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(14, 79, 112, 0.22), rgba(14, 79, 112, 0.02));
+}
+
+.cover-top {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  align-items: flex-start;
+  position: relative;
+  z-index: 2;
+}
+
+.brand-block {
+  border: 1px dashed #99adbc;
+  border-radius: var(--radius);
+  min-height: 54px;
+  min-width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 9pt;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.cover-kicker {
+  display: inline-block;
+  border: 1px solid rgba(14, 79, 112, 0.35);
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: var(--accent);
+  font-size: 8.5pt;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-3);
+}
+
+.cover-title {
+  margin-bottom: var(--space-3);
+  max-width: 500px;
+}
+
+.cover-sub {
+  font-size: 11pt;
+  color: var(--ink-soft);
+  max-width: 560px;
+}
+
+.cover-meta-grid {
+  margin-top: var(--space-7);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.meta-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.meta-card .label {
+  color: var(--muted);
+  font-size: 8.5pt;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.meta-card .value {
+  color: var(--ink);
+  font-size: 10.5pt;
+  font-weight: 600;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: var(--space-2);
+}
+
+.section-tag {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 8pt;
+  color: var(--muted);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.kpi-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  background: #fff;
+}
+
+.kpi-card .kpi-label {
+  font-size: 8.5pt;
+  color: var(--muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.kpi-card .kpi-value {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.kpi-card .kpi-note {
+  margin-top: 6px;
+  font-size: 8.7pt;
+  color: var(--muted);
+}
+
+.status-pill {
+  display: inline-flex;
+  border-radius: 999px;
+  padding: 2px 9px;
+  font-size: 8pt;
+  font-weight: 700;
+}
+
+.status-pill.positive { color: var(--positive); background: rgba(27, 125, 85, 0.12); border: 1px solid rgba(27, 125, 85, 0.35); }
+.status-pill.warning { color: var(--warning); background: rgba(155, 107, 28, 0.12); border: 1px solid rgba(155, 107, 28, 0.35); }
+.status-pill.negative { color: var(--negative); background: rgba(169, 59, 59, 0.12); border: 1px solid rgba(169, 59, 59, 0.35); }
+
+.comparison-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  background: #ffffff;
+}
+
+.comparison-title {
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.comparison-list {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--ink-soft);
+}
+
+.comparison-list li {
+  margin-bottom: 6px;
+}
+
+.block {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  background: #fff;
+}
+
+.block + .block {
+  margin-top: var(--space-3);
+}
+
+.callout {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  border-radius: 8px;
+  padding: var(--space-3);
+}
+
+.recommendation-box {
+  border: 1px solid rgba(14, 79, 112, 0.35);
+  background: linear-gradient(145deg, #f2f8fc, #ffffff);
+  border-radius: 12px;
+  padding: var(--space-4);
+}
+
+.recommendation-title {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+thead th {
+  text-align: left;
+  background: #eef4f8;
+  color: var(--ink);
+  font-size: 8.5pt;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border-bottom: 1px solid var(--line);
+  padding: 8px 8px;
+}
+
+tbody td {
+  border-bottom: 1px solid #edf2f6;
+  padding: 7px 8px;
+  font-size: 9.3pt;
+  color: var(--ink-soft);
+  vertical-align: top;
+}
+
+tbody tr:nth-child(even) td {
+  background: #fcfdff;
+}
+
+.table-wrap {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #fff;
+}
+
+.right { text-align: right; }
+.center { text-align: center; }
+.strong { color: var(--ink); font-weight: 700; }
+
+.chart-block {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  background: #fff;
+}
+
+.bar-list {
+  display: grid;
+  gap: 8px;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 100px;
+  gap: 10px;
+  align-items: center;
+}
+
+.bar-label {
+  font-size: 8.8pt;
+  color: var(--ink-soft);
+}
+
+.bar-track {
+  height: 12px;
+  border-radius: 999px;
+  background: #edf3f7;
+  position: relative;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0e4f70, #2d7596);
+}
+
+.bar-value {
+  text-align: right;
+  font-size: 8.7pt;
+  color: var(--ink-soft);
+}
+
+.note-box {
+  border: 1px solid rgba(155, 107, 28, 0.35);
+  background: rgba(255, 247, 234, 0.9);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+}
+
+.empty-state {
+  border: 1px dashed #c9d6e0;
+  border-radius: var(--radius);
+  color: var(--muted);
+  padding: var(--space-4);
+  text-align: center;
+  font-size: 9pt;
+}
+
+.caption {
+  color: var(--muted);
+  font-size: 8.3pt;
+  margin-top: 6px;
+}
+
+.risk-box {
+  border-left: 4px solid var(--warning);
+  border-radius: 8px;
+  background: #fffaf0;
+  padding: var(--space-3);
+}
+
+.footnote {
+  color: var(--muted);
+  font-size: 8pt;
+}
+
+ul.compact {
+  margin: 0;
+  padding-left: 17px;
+}
+
+ul.compact li { margin-bottom: 4px; }
+
+.section {
+  break-inside: avoid-page;
+}
+
+.section h2, .section h3 {
+  break-after: avoid-page;
+  page-break-after: avoid;
+}
+
+.recommendation-box,
+.chart-block,
+.table-wrap,
+.block,
+.callout,
+.note-box,
+.risk-box {
+  break-inside: avoid-page;
+}
+
+thead {
+  display: table-header-group;
+}
+
+tfoot {
+  display: table-footer-group;
+}
+
+tr {
+  page-break-inside: avoid;
+  break-inside: avoid-page;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm 12mm 20mm 12mm;
+  }
+
+  html, body {
+    background: #fff;
+  }
+
+  .report-root {
+    width: auto;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page {
+    margin: 0 0 8mm 0;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  .cover-page {
+    min-height: 250mm;
+    page-break-after: always;
+  }
+
+  .cover-page::before {
+    opacity: 0.45;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+  <main class="report-root">
+<section class="page cover-page"><div class="cover-top"><div><div class="cover-kicker">Engineering Decision Report</div><h1 class="cover-title">Bifacial PV Mounting Decision Report</h1><p class="cover-sub">1) Veri Özeti
+Adapter Test Project için arka taşıyıcı gölgelenme etkisi karşılaştırılmış, referans senaryo &#x27;No rear support&#x27; ve en iyi enerji sonucu &#x27;No rear support&#x27; olarak belirlenmiştir.</p></div><div class="brand-block">Logo / Branding Area</div></div><div class="cover-meta-grid"><div class="meta-card"><div class="label">Project</div><div class="value">Adapter Test Project</div></div><div class="meta-card"><div class="label">Report Date</div><div class="value">2026-03-12</div></div><div class="meta-card"><div class="label">Reference Scenario</div><div class="value">No rear support</div></div><div class="meta-card"><div class="label">Recommended Scenario</div><div class="value">No rear support</div></div><div class="meta-card"><div class="label">Scenario Count</div><div class="value">4</div></div><div class="meta-card"><div class="label">Site / Coordinates</div><div class="value">Bifacial Rear Support Comparison</div></div></div></section>
+<section class="page section"><div class="section-header"><h2>Report Metadata / Project Information</h2><span class="section-tag">Context</span></div><div class="grid-2"><div class="block"><h3>Project Metadata</h3><div class="cover-meta-grid"><div class="meta-card"><div class="label">Prepared By</div><div class="value">Bifacial Analytics Platform</div></div><div class="meta-card"><div class="label">Client</div><div class="value">Not specified</div></div><div class="meta-card"><div class="label">Project Code</div><div class="value">Not specified</div></div><div class="meta-card"><div class="label">Report Version</div><div class="value">2.0</div></div><div class="meta-card"><div class="label">Currency</div><div class="value">USD</div></div><div class="meta-card"><div class="label">Annual Albedo</div><div class="value">N/A</div></div><div class="meta-card"><div class="label">Annual GHI (kWh/m2)</div><div class="value">N/A</div></div><div class="meta-card"><div class="label">Reference Scenario</div><div class="value">No rear support</div></div></div></div><div class="block"><h3>Site Notes</h3><p>Climate note not provided. NASA POWER and PVGIS context still applied where available.</p><div class="callout"><strong>Decision Context</strong><p class="small">This report is designed to support purlin-count selection by balancing energy yield, structural confidence, and indicative commercial implications.</p></div></div></div><div class="grid-3" style="margin-top:12px"><div class="kpi-card"><div class="kpi-label">Best Energy Scenario</div><div class="kpi-value">No rear support</div><div class="kpi-note">Annual total: 1,108,000 kWh</div></div><div class="kpi-card"><div class="kpi-label">Best Structural Confidence</div><div class="kpi-value">3 rear purlins</div><div class="kpi-note">Score: 84.5/100</div></div><div class="kpi-card"><div class="kpi-label">Lowest Structure Cost</div><div class="kpi-value">No rear support</div><div class="kpi-note">Cost: +420,000 USD</div></div></div></section>
+<section class="page section"><div class="section-header"><h2>Executive Summary</h2><span class="section-tag">Investor / Management</span></div><div class="callout"><p>1) Veri Özeti
+Adapter Test Project için arka taşıyıcı gölgelenme etkisi karşılaştırılmış, referans senaryo &#x27;No rear support&#x27; ve en iyi enerji sonucu &#x27;No rear support&#x27; olarak belirlenmiştir.
+Yıllık toplam enerji bandı 1,082,622 - 1,108,000 kWh olup senaryo yayılımı 25,378 kWh seviyesindedir.
+En iyi senaryonun referansa göre farkı +0 kWh (%+0.00) olarak hesaplanmıştır.
+
+2) Teknik Yorum
+En iyi senaryoda arka blokaj %0.00, mismatch %10.00 ve etkili arka kazanç %10.80 düzeyindedir.
+Aşık/çapraz eleman yoğunluğu arttıkça mekanik rijitlik kazanımı ile arka yüz ışınım kaybı birlikte artabilir; nihai seçim enerji, montaj riski ve statik gereksinimlerin ortak optimizasyonu ile yapılmalıdır.
+
+3) Tasarım Optimizasyon Önerileri
+Referans + 2 alternatif senaryo için çok kriterli karar matrisi kurulmalı; enerji, montaj zorluğu ve yapısal güvenlik birlikte puanlanmalıdır.
+Kritik eğim bölgelerinde segmentasyon (ör. 2x26 yerine 2x13) ile lokal kolon boyu ve sahadaki uygulama riski düşürülebilir.
+Uygulama öncesi, yüksek sertlik sınıfında ön delgi/kazık stratejisi ve ekipman erişimi için ayrı bir saha doğrulaması yapılmalıdır.
+
+4) Riskler ve Kontrol Planı
+Sahada lokal topografya farklarının yüksek olduğu bölgeler için kolon boyu, bağlantı kotu ve erişilebilirlik kontrolleri ayrı hold-point olarak yönetilmelidir.
+Devreye alma öncesinde pilot bölgede ölçüm alınarak model kalibrasyonu yapılmalı ve gerekirse seçilen senaryo revize edilmelidir.
+
+5) Sonuç
+Model sonuçları enerji açısından &#x27;No rear support&#x27; senaryosunu öne çıkarmaktadır; nihai karar saha uygulanabilirliği ve statik emniyet ile birlikte verilmelidir.</p></div><div style="margin-top:12px"><div class="section-header"><h2>Decision Snapshot</h2><span class="section-tag">One-Page Decision</span></div><div class="grid-3"><div class="kpi-card"><div class="kpi-label">Recommended Scenario</div><div class="kpi-value">No rear support</div><div class="kpi-note">Decision score: 80.0/100</div></div><div class="kpi-card"><div class="kpi-label">Energy Delta vs Reference</div><div class="kpi-value">0 kWh</div><div class="kpi-note">Positive values indicate higher annual total energy.</div></div><div class="kpi-card"><div class="kpi-label">CAPEX Delta vs Reference</div><div class="kpi-value">0 USD</div><div class="kpi-note">Indicative structure CAPEX difference.</div></div></div><div style="margin-top:12px" class="grid-2"><div class="comparison-card"><div class="comparison-title">Why This Option</div><ul class="compact"><li>Purlin count: 0</li><li>No cross-brace</li><li>Structure cost includes indicative purlin and brace uplift assumptions.</li></ul></div><div class="comparison-card"><div class="comparison-title">Watch-Outs <span class="status-pill warning">WARNING</span></div><ul class="compact"><li>No major downside is dominant in current model context; proceed with site-specific verification.</li></ul></div></div><p class="caption">Primary recommendation: No rear support. Compared with reference &#x27;No rear support&#x27;, this option targets a balanced return profile under current climate/albedo assumptions.</p></div></section>
+<section class="page section"><div class="section-header"><h2>Methodology Overview</h2><span class="section-tag">Technical Basis</span></div><div class="block"><ul class="compact"><li>Scenario set is evaluated with Monte Carlo-based rear-side obstruction and mismatch propagation.</li><li>Rear gain and annual total energy are calculated per scenario and compared against reference.</li><li>Decision score combines energy performance, indicative structure cost, and structural confidence proxy.</li></ul></div><div class="section-header"><h2>Data Sources and Assumptions</h2><span class="section-tag">Input Integrity</span></div><div class="grid-2"><div class="table-wrap"><table><thead><tr><th>Source</th><th>Provider</th><th>Retrieved</th><th>Note</th></tr></thead><tbody><tr><td class='strong'>NASA POWER</td><td>NASA</td><td>-</td><td>Albedo and climatology context.</td></tr><tr><td class='strong'>PVGIS TMY 5.2</td><td>European Commission JRC</td><td>-</td><td>Irradiance and meteorological baseline.</td></tr></tbody></table></div><div class="table-wrap"><table><thead><tr><th>Assumption</th><th>Value</th><th>Confidence</th></tr></thead><tbody><tr><td class='strong'>Analysis engine</td><td>Monte Carlo rear-side obstruction comparison across scenarios.</td><td class='center'><span class='status-pill high'>HIGH</span></td></tr><tr><td class='strong'>Climate source</td><td>NASA POWER and PVGIS derived climate/albedo inputs.</td><td class='center'><span class='status-pill high'>HIGH</span></td></tr><tr><td class='strong'>Cost normalization</td><td>Base structure cost = 420,000 USD, purlin uplift = 17,500 USD/purlin, cross-brace uplift = 12,500 USD.</td><td class='center'><span class='status-pill medium'>MEDIUM</span></td></tr><tr><td class='strong'>Uncertainty note</td><td>Ranges represent scenario confidence interpretation, not guaranteed yield bounds.</td><td class='center'><span class='status-pill medium'>MEDIUM</span></td></tr></tbody></table></div></div></section>
+<section class="page section"><div class="section-header"><h2>Scenario Definitions</h2><span class="section-tag">Alternatives</span></div><div class="grid-2"><div class="comparison-card"><div class="comparison-title">No rear support</div><ul class="compact"><li>Purlin count: 0</li><li>Cross-brace: No</li><li>Rear blockage: 0.00%</li><li>Structure cost: +420,000 USD</li></ul></div><div class="comparison-card"><div class="comparison-title">2 rear purlins</div><ul class="compact"><li>Purlin count: 2</li><li>Cross-brace: No</li><li>Rear blockage: 6.50%</li><li>Structure cost: +455,000 USD</li></ul></div><div class="comparison-card"><div class="comparison-title">3 rear purlins</div><ul class="compact"><li>Purlin count: 3</li><li>Cross-brace: No</li><li>Rear blockage: 9.93%</li><li>Structure cost: +472,500 USD</li></ul></div><div class="comparison-card"><div class="comparison-title">2 purlins + cross brace</div><ul class="compact"><li>Purlin count: 2</li><li>Cross-brace: Yes</li><li>Rear blockage: 19.84%</li><li>Structure cost: +467,500 USD</li></ul></div></div><div class="section-header"><h2>Scenario Comparison Summary</h2><span class="section-tag">Side-by-Side</span></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Scenario</th><th>Purlin</th><th>Cross Brace</th><th class='right'>Annual Total (kWh)</th><th class='right'>Eff. Rear Gain (%)</th><th class='right'>Structural Score</th><th class='right'>Structure Cost</th><th class='right'>Delta vs Ref (kWh)</th></tr></thead><tbody><tr><td class='center strong'>1</td><td class='strong'>No rear support (REF)</td><td class='center'>0</td><td class='center'>No</td><td class='right'>1,108,000</td><td class='right'>10.80</td><td class='right'>56.0</td><td class='right'>+420,000 USD</td><td class='right'>0</td></tr><tr><td class='center strong'>2</td><td class='strong'>2 rear purlins</td><td class='center'>2</td><td class='center'>No</td><td class='right'>1,096,925</td><td class='right'>9.69</td><td class='right'>75.0</td><td class='right'>+455,000 USD</td><td class='right'>-11,075</td></tr><tr><td class='center strong'>3</td><td class='strong'>3 rear purlins</td><td class='center'>3</td><td class='center'>No</td><td class='right'>1,093,217</td><td class='right'>9.32</td><td class='right'>84.5</td><td class='right'>+472,500 USD</td><td class='right'>-14,783</td></tr><tr><td class='center strong'>4</td><td class='strong'>2 purlins + cross brace</td><td class='center'>2</td><td class='center'>Yes</td><td class='right'>1,082,622</td><td class='right'>8.26</td><td class='right'>82.5</td><td class='right'>+467,500 USD</td><td class='right'>-25,378</td></tr></tbody></table></div></section>
+<section class="page section"><div class="section-header"><h2>Bifacial Rear-Side Impact Analysis</h2><span class="section-tag">Optical / Mismatch</span></div><div class="grid-2"><div class="chart-block"><h3>Rear-Side Obstruction by Scenario</h3><div class="bar-list"><div class="bar-row"><div class="bar-label">No rear support</div><div class="bar-track"><div class="bar-fill" style="width:16.0%"></div></div><div class="bar-value">0.00%</div></div><div class="bar-row"><div class="bar-label">2 rear purlins</div><div class="bar-track"><div class="bar-fill" style="width:43.5%"></div></div><div class="bar-value">6.50%</div></div><div class="bar-row"><div class="bar-label">3 rear purlins</div><div class="bar-track"><div class="bar-fill" style="width:58.0%"></div></div><div class="bar-value">9.93%</div></div><div class="bar-row"><div class="bar-label">2 purlins + cross brace</div><div class="bar-track"><div class="bar-fill" style="width:100.0%"></div></div><div class="bar-value">19.84%</div></div></div><div class="caption">Higher values indicate stronger backside shading/obstruction effect.</div></div><div class="chart-block"><h3>Effective Rear Gain (%)</h3><div class="bar-list"><div class="bar-row"><div class="bar-label">No rear support</div><div class="bar-track"><div class="bar-fill" style="width:100.0%"></div></div><div class="bar-value">10.80%</div></div><div class="bar-row"><div class="bar-label">2 rear purlins</div><div class="bar-track"><div class="bar-fill" style="width:63.3%"></div></div><div class="bar-value">9.69%</div></div><div class="bar-row"><div class="bar-label">3 rear purlins</div><div class="bar-track"><div class="bar-fill" style="width:51.1%"></div></div><div class="bar-value">9.32%</div></div><div class="bar-row"><div class="bar-label">2 purlins + cross brace</div><div class="bar-track"><div class="bar-fill" style="width:16.0%"></div></div><div class="bar-value">8.26%</div></div></div><div class="caption">Estimated effective rear-side energy contribution ratio.</div></div></div><div class="section-header"><h2>Energy Yield Comparison</h2><span class="section-tag">Yield Delta</span></div><div class="chart-block"><h3>Annual Total Energy (kWh)</h3><div class="bar-list"><div class="bar-row"><div class="bar-label">No rear support</div><div class="bar-track"><div class="bar-fill" style="width:100.0%"></div></div><div class="bar-value">1,108,000</div></div><div class="bar-row"><div class="bar-label">2 rear purlins</div><div class="bar-track"><div class="bar-fill" style="width:63.3%"></div></div><div class="bar-value">1,096,925</div></div><div class="bar-row"><div class="bar-label">3 rear purlins</div><div class="bar-track"><div class="bar-fill" style="width:51.1%"></div></div><div class="bar-value">1,093,217</div></div><div class="bar-row"><div class="bar-label">2 purlins + cross brace</div><div class="bar-track"><div class="bar-fill" style="width:16.0%"></div></div><div class="bar-value">1,082,622</div></div></div><div class="caption">Comparative annual total energy output across purlin alternatives.</div></div></section>
+<section class="page section"><div class="section-header"><h2>Structural / Engineering Considerations</h2><span class="section-tag">Engineering</span></div><div class="grid-2"><div class="chart-block"><h3>Structural Confidence Proxy (0-100)</h3><div class="bar-list"><div class="bar-row"><div class="bar-label">No rear support</div><div class="bar-track"><div class="bar-fill" style="width:16.0%"></div></div><div class="bar-value">56.0</div></div><div class="bar-row"><div class="bar-label">2 rear purlins</div><div class="bar-track"><div class="bar-fill" style="width:72.0%"></div></div><div class="bar-value">75.0</div></div><div class="bar-row"><div class="bar-label">3 rear purlins</div><div class="bar-track"><div class="bar-fill" style="width:100.0%"></div></div><div class="bar-value">84.5</div></div><div class="bar-row"><div class="bar-label">2 purlins + cross brace</div><div class="bar-track"><div class="bar-fill" style="width:94.1%"></div></div><div class="bar-value">82.5</div></div></div><div class="caption">Proxy score intended for comparative decision support, not final static approval.</div></div><div class="note-box"><h3>Engineering Interpretation</h3><ul class="compact"><li>Structural confidence scores are comparative indicators based on purlin count and brace presence.</li><li>Final structural acceptance requires project code checks, geotechnical envelope, and detailed design verification.</li><li>Reference scenario for cost deltas: No rear support.</li></ul></div></div><div class="section-header"><h2>Cost and Commercial Comparison</h2><span class="section-tag">Commercial</span></div><div class="grid-2"><div class="chart-block"><h3>Indicative Structure Cost (USD)</h3><div class="bar-list"><div class="bar-row"><div class="bar-label">No rear support</div><div class="bar-track"><div class="bar-fill" style="width:16.0%"></div></div><div class="bar-value">420,000</div></div><div class="bar-row"><div class="bar-label">2 rear purlins</div><div class="bar-track"><div class="bar-fill" style="width:72.0%"></div></div><div class="bar-value">455,000</div></div><div class="bar-row"><div class="bar-label">3 rear purlins</div><div class="bar-track"><div class="bar-fill" style="width:100.0%"></div></div><div class="bar-value">472,500</div></div><div class="bar-row"><div class="bar-label">2 purlins + cross brace</div><div class="bar-track"><div class="bar-fill" style="width:92.0%"></div></div><div class="bar-value">467,500</div></div></div><div class="caption">Structure CAPEX proxy driven by purlin count and brace usage assumptions.</div></div><div class="table-wrap"><table><thead><tr><th>Scenario</th><th class='right'>Structure Cost</th><th class='right'>Delta vs Ref</th><th class='right'>LCOE Delta (%)</th></tr></thead><tbody><tr><td class='strong'>No rear support</td><td class='right'>+420,000 USD</td><td class='right'>0 USD</td><td class='right'>N/A</td></tr><tr><td class='strong'>2 rear purlins</td><td class='right'>+455,000 USD</td><td class='right'>+35,000 USD</td><td class='right'>N/A</td></tr><tr><td class='strong'>3 rear purlins</td><td class='right'>+472,500 USD</td><td class='right'>+52,500 USD</td><td class='right'>N/A</td></tr><tr><td class='strong'>2 purlins + cross brace</td><td class='right'>+467,500 USD</td><td class='right'>+47,500 USD</td><td class='right'>N/A</td></tr></tbody></table></div></div></section>
+<section class="page section"><div class="section-header"><h2>Uncertainty / Sensitivity Interpretation</h2><span class="section-tag">Risk Envelope</span></div><div class="risk-box"><p>Monte Carlo-based results are interpreted as confidence-aware scenario outcomes. Values indicate decision-oriented ranges, not deterministic guarantees.</p></div><div class="table-wrap" style="margin-top:10px"><table><thead><tr><th>Scenario</th><th class='right'>P90 (kWh)</th><th class='right'>P50 (kWh)</th><th class='right'>P10 (kWh)</th><th>Interpretation</th></tr></thead><tbody><tr><td class='strong'>No rear support</td><td class='right'>1,108,000</td><td class='right'>1,108,000</td><td class='right'>1,108,000</td><td>Indicative confidence range derived from rear-side non-uniformity proxy.</td></tr><tr><td class='strong'>2 rear purlins</td><td class='right'>1,092,435</td><td class='right'>1,096,925</td><td class='right'>1,101,415</td><td>Indicative confidence range derived from rear-side non-uniformity proxy.</td></tr><tr><td class='strong'>3 rear purlins</td><td class='right'>1,088,739</td><td class='right'>1,093,217</td><td class='right'>1,097,696</td><td>Indicative confidence range derived from rear-side non-uniformity proxy.</td></tr><tr><td class='strong'>2 purlins + cross brace</td><td class='right'>1,078,282</td><td class='right'>1,082,622</td><td class='right'>1,086,962</td><td>Indicative confidence range derived from rear-side non-uniformity proxy.</td></tr></tbody></table></div></section>
+<section class="page section"><div class="section-header"><h2>Key Trade-Offs</h2><span class="section-tag">Decision Drivers</span></div><div class="block"><ul class="compact"><li>Lower purlin count tends to improve rear irradiance access and can reduce structural CAPEX uplift.</li><li>Higher purlin count increases structure robustness confidence but usually raises backside obstruction and cost.</li><li>The economically preferred option should satisfy both yield advantage and minimum structural reliability threshold.</li></ul></div><div class="section-header"><h2>Final Recommendation</h2><span class="section-tag">Decision</span></div><div class="recommendation-box"><div class="recommendation-title">Recommended Scenario</div><h3>No rear support</h3><p>Recommended baseline for bankable deployment: &#x27;No rear support&#x27;. Decision score 80.0/100.</p><ul class="compact"><li>Energy-positioned outcome with annual total 1,108,000 kWh.</li><li>Structure cost delta vs reference: +0 USD (indicative).</li><li>Structural confidence proxy: 56.0/100.</li></ul><p class='footnote'>If static checks or site risk controls tighten, &#x27;2 rear purlins&#x27; can be selected as a risk-downside alternative.</p><p class='footnote'><strong>Investor Interpretation:</strong> Select the highest decision-score scenario while validating static constraints with project-specific engineering calculations.</p></div></section>
+<section class="page section"><div class="section-header"><h2>Appendix / Technical Notes</h2><span class="section-tag">Reference</span></div><div class="block"><ul class="compact"><li>This report is for decision support and does not replace detailed structural design checks.</li><li>Final EPC execution decisions should include local geotechnical constraints and code compliance.</li></ul></div><div class="table-wrap" style="margin-top:10px"><table><thead><tr><th>Scenario ID</th><th>Label</th><th>Purlin</th><th>Cross Brace</th><th class='right'>Rear Blockage (%)</th><th class='right'>Mismatch (%)</th><th class='right'>Decision Score</th></tr></thead><tbody><tr><td class='strong'>no-rear-support</td><td>No rear support</td><td class='center'>0</td><td class='center'>No</td><td class='right'>0.00</td><td class='right'>10.00</td><td class='right'>80.0</td></tr><tr><td class='strong'>2-rear-purlins</td><td>2 rear purlins</td><td class='center'>2</td><td class='center'>No</td><td class='right'>6.50</td><td class='right'>13.62</td><td class='right'>51.5</td></tr><tr><td class='strong'>3-rear-purlins</td><td>3 rear purlins</td><td class='center'>3</td><td class='center'>No</td><td class='right'>9.93</td><td class='right'>13.75</td><td class='right'>40.9</td></tr><tr><td class='strong'>2-purlins-cross-brace</td><td>2 purlins + cross brace</td><td class='center'>2</td><td class='center'>Yes</td><td class='right'>19.84</td><td class='right'>14.10</td><td class='right'>21.5</td></tr></tbody></table></div><div class="block" style="margin-top:10px"><h3>Simulation Trace (Excerpt)</h3><pre class='mono small' style='white-space:pre-wrap'>No simulation trace provided.</pre></div></section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,224 @@
+{
+  "metadata": {
+    "report_title": "Bifacial PV Mounting Decision Report",
+    "project_name": "Adapter Test Project",
+    "project_code": null,
+    "client_name": null,
+    "prepared_by": "Bifacial Analytics Platform",
+    "report_date": "2026-03-12",
+    "report_version": "2.0",
+    "currency": "USD"
+  },
+  "site": {
+    "site_name": "Bifacial Rear Support Comparison",
+    "country": null,
+    "latitude": null,
+    "longitude": null,
+    "annual_albedo": null,
+    "annual_ghi_kwh_m2": null,
+    "climate_note": null
+  },
+  "executive_summary": "1) Veri Özeti\nAdapter Test Project için arka taşıyıcı gölgelenme etkisi karşılaştırılmış, referans senaryo 'No rear support' ve en iyi enerji sonucu 'No rear support' olarak belirlenmiştir.\nYıllık toplam enerji bandı 1,082,622 - 1,108,000 kWh olup senaryo yayılımı 25,378 kWh seviyesindedir.\nEn iyi senaryonun referansa göre farkı +0 kWh (%+0.00) olarak hesaplanmıştır.\n\n2) Teknik Yorum\nEn iyi senaryoda arka blokaj %0.00, mismatch %10.00 ve etkili arka kazanç %10.80 düzeyindedir.\nAşık/çapraz eleman yoğunluğu arttıkça mekanik rijitlik kazanımı ile arka yüz ışınım kaybı birlikte artabilir; nihai seçim enerji, montaj riski ve statik gereksinimlerin ortak optimizasyonu ile yapılmalıdır.\n\n3) Tasarım Optimizasyon Önerileri\nReferans + 2 alternatif senaryo için çok kriterli karar matrisi kurulmalı; enerji, montaj zorluğu ve yapısal güvenlik birlikte puanlanmalıdır.\nKritik eğim bölgelerinde segmentasyon (ör. 2x26 yerine 2x13) ile lokal kolon boyu ve sahadaki uygulama riski düşürülebilir.\nUygulama öncesi, yüksek sertlik sınıfında ön delgi/kazık stratejisi ve ekipman erişimi için ayrı bir saha doğrulaması yapılmalıdır.\n\n4) Riskler ve Kontrol Planı\nSahada lokal topografya farklarının yüksek olduğu bölgeler için kolon boyu, bağlantı kotu ve erişilebilirlik kontrolleri ayrı hold-point olarak yönetilmelidir.\nDevreye alma öncesinde pilot bölgede ölçüm alınarak model kalibrasyonu yapılmalı ve gerekirse seçilen senaryo revize edilmelidir.\n\n5) Sonuç\nModel sonuçları enerji açısından 'No rear support' senaryosunu öne çıkarmaktadır; nihai karar saha uygulanabilirliği ve statik emniyet ile birlikte verilmelidir.",
+  "decision_snapshot": "Primary recommendation: No rear support. Compared with reference 'No rear support', this option targets a balanced return profile under current climate/albedo assumptions.",
+  "methodology_overview": [
+    "Scenario set is evaluated with Monte Carlo-based rear-side obstruction and mismatch propagation.",
+    "Rear gain and annual total energy are calculated per scenario and compared against reference.",
+    "Decision score combines energy performance, indicative structure cost, and structural confidence proxy."
+  ],
+  "data_sources": [
+    {
+      "name": "NASA POWER",
+      "provider": "NASA",
+      "url": "https://power.larc.nasa.gov/",
+      "retrieved_at": null,
+      "note": "Albedo and climatology context."
+    },
+    {
+      "name": "PVGIS TMY 5.2",
+      "provider": "European Commission JRC",
+      "url": "https://re.jrc.ec.europa.eu/pvg_tools/en/",
+      "retrieved_at": null,
+      "note": "Irradiance and meteorological baseline."
+    }
+  ],
+  "assumptions": [
+    {
+      "title": "Analysis engine",
+      "value": "Monte Carlo rear-side obstruction comparison across scenarios.",
+      "confidence": "high"
+    },
+    {
+      "title": "Climate source",
+      "value": "NASA POWER and PVGIS derived climate/albedo inputs.",
+      "confidence": "high"
+    },
+    {
+      "title": "Cost normalization",
+      "value": "Base structure cost = 420,000 USD, purlin uplift = 17,500 USD/purlin, cross-brace uplift = 12,500 USD.",
+      "confidence": "medium"
+    },
+    {
+      "title": "Uncertainty note",
+      "value": "Ranges represent scenario confidence interpretation, not guaranteed yield bounds.",
+      "confidence": "medium"
+    }
+  ],
+  "scenarios": [
+    {
+      "scenario_id": "no-rear-support",
+      "label": "No rear support",
+      "purlin_count": 0,
+      "cross_brace": false,
+      "annual_total_kwh": 1108000.0,
+      "annual_rear_kwh": 108000.0,
+      "effective_rear_gain_pct": 10.8,
+      "rear_blockage_pct": 0.0,
+      "rear_blockage_std_pct": 0.0,
+      "mismatch_pct": 10.0,
+      "structural_confidence_score": 56.0,
+      "structure_cost": 420000.0,
+      "capex_delta_vs_ref": 0.0,
+      "delta_kwh_vs_ref": 0.0,
+      "delta_pct_vs_ref": 0.0,
+      "lcoe_delta_pct": null,
+      "decision_score": 80.0,
+      "engineering_notes": [
+        "Purlin count: 0",
+        "No cross-brace"
+      ],
+      "commercial_notes": [
+        "Structure cost includes indicative purlin and brace uplift assumptions."
+      ]
+    },
+    {
+      "scenario_id": "2-rear-purlins",
+      "label": "2 rear purlins",
+      "purlin_count": 2,
+      "cross_brace": false,
+      "annual_total_kwh": 1096924.9615954852,
+      "annual_rear_kwh": 96924.96159548523,
+      "effective_rear_gain_pct": 9.692496159548522,
+      "rear_blockage_pct": 6.495000000000001,
+      "rear_blockage_std_pct": 10.339244411464506,
+      "mismatch_pct": 13.618735544012576,
+      "structural_confidence_score": 75.0,
+      "structure_cost": 455000.0,
+      "capex_delta_vs_ref": 35000.0,
+      "delta_kwh_vs_ref": -11075.03840451478,
+      "delta_pct_vs_ref": -0.9995522025735393,
+      "lcoe_delta_pct": null,
+      "decision_score": 51.51342497465991,
+      "engineering_notes": [
+        "Purlin count: 2",
+        "No cross-brace"
+      ],
+      "commercial_notes": [
+        "Structure cost includes indicative purlin and brace uplift assumptions."
+      ]
+    },
+    {
+      "scenario_id": "3-rear-purlins",
+      "label": "3 rear purlins",
+      "purlin_count": 3,
+      "cross_brace": false,
+      "annual_total_kwh": 1093217.4806050793,
+      "annual_rear_kwh": 93217.48060507922,
+      "effective_rear_gain_pct": 9.321748060507923,
+      "rear_blockage_pct": 9.931666666666667,
+      "rear_blockage_std_pct": 10.722862257811578,
+      "mismatch_pct": 13.753001790234052,
+      "structural_confidence_score": 84.5,
+      "structure_cost": 472500.0,
+      "capex_delta_vs_ref": 52500.0,
+      "delta_kwh_vs_ref": -14782.519394920673,
+      "delta_pct_vs_ref": -1.3341624002635943,
+      "lcoe_delta_pct": null,
+      "decision_score": 40.875656884766066,
+      "engineering_notes": [
+        "Purlin count: 3",
+        "No cross-brace"
+      ],
+      "commercial_notes": [
+        "Structure cost includes indicative purlin and brace uplift assumptions."
+      ]
+    },
+    {
+      "scenario_id": "2-purlins-cross-brace",
+      "label": "2 purlins + cross brace",
+      "purlin_count": 2,
+      "cross_brace": true,
+      "annual_total_kwh": 1082621.7119190777,
+      "annual_rear_kwh": 82621.71191907766,
+      "effective_rear_gain_pct": 8.262171191907765,
+      "rear_blockage_pct": 19.843333333333334,
+      "rear_blockage_std_pct": 11.725513966465511,
+      "mismatch_pct": 14.103929888262929,
+      "structural_confidence_score": 82.5,
+      "structure_cost": 467500.0,
+      "capex_delta_vs_ref": 47500.0,
+      "delta_kwh_vs_ref": -25378.288080922328,
+      "delta_pct_vs_ref": -2.290459213079632,
+      "lcoe_delta_pct": null,
+      "decision_score": 21.453634085213036,
+      "engineering_notes": [
+        "Purlin count: 2",
+        "Cross-brace used"
+      ],
+      "commercial_notes": [
+        "Structure cost includes indicative purlin and brace uplift assumptions."
+      ]
+    }
+  ],
+  "reference_scenario_id": "no-rear-support",
+  "uncertainty": [
+    {
+      "scenario_id": "no-rear-support",
+      "p50_kwh": 1108000.0,
+      "p90_kwh": 1108000.0,
+      "p10_kwh": 1108000.0,
+      "note": "Indicative confidence range derived from rear-side non-uniformity proxy."
+    },
+    {
+      "scenario_id": "2-rear-purlins",
+      "p50_kwh": 1096924.9615954852,
+      "p90_kwh": 1092435.4153090515,
+      "p10_kwh": 1101414.507881919,
+      "note": "Indicative confidence range derived from rear-side non-uniformity proxy."
+    },
+    {
+      "scenario_id": "3-rear-purlins",
+      "p50_kwh": 1093217.4806050793,
+      "p90_kwh": 1088739.4598487022,
+      "p10_kwh": 1097695.5013614565,
+      "note": "Indicative confidence range derived from rear-side non-uniformity proxy."
+    },
+    {
+      "scenario_id": "2-purlins-cross-brace",
+      "p50_kwh": 1082621.7119190777,
+      "p90_kwh": 1078281.5683931366,
+      "p10_kwh": 1086961.8554450187,
+      "note": "Indicative confidence range derived from rear-side non-uniformity proxy."
+    }
+  ],
+  "key_tradeoffs": [
+    "Lower purlin count tends to improve rear irradiance access and can reduce structural CAPEX uplift.",
+    "Higher purlin count increases structure robustness confidence but usually raises backside obstruction and cost.",
+    "The economically preferred option should satisfy both yield advantage and minimum structural reliability threshold."
+  ],
+  "recommendation": {
+    "recommended_scenario_id": "no-rear-support",
+    "summary": "Recommended baseline for bankable deployment: 'No rear support'. Decision score 80.0/100.",
+    "rationale": [
+      "Energy-positioned outcome with annual total 1,108,000 kWh.",
+      "Structure cost delta vs reference: +0 USD (indicative).",
+      "Structural confidence proxy: 56.0/100."
+    ],
+    "conditional_note": "If static checks or site risk controls tighten, '2 rear purlins' can be selected as a risk-downside alternative.",
+    "investor_takeaway": "Select the highest decision-score scenario while validating static constraints with project-specific engineering calculations."
+  },
+  "appendix_notes": [
+    "This report is for decision support and does not replace detailed structural design checks.",
+    "Final EPC execution decisions should include local geotechnical constraints and code compliance."
+  ],
+  "simulation_stdout": ""
+}

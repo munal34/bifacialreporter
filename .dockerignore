@@ -1,0 +1,13 @@
+.git
+.gitignore
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+outputs/
+test-results/
+test_template_convert.pdf
+*.log
+.DS_Store

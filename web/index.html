@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bifacial Destek Kayıp Stüdyosu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <main class="shell">
+    <section class="panel hero">
+      <div>
+        <h1>Bifacial Destek Kayıp Stüdyosu</h1>
+        <p>Bifacial verimde arka taşıyıcı gölgeleme etkisi için adım adım teknik modelleme.</p>
+      </div>
+      <div class="hero-badge">Yerel Mühendislik Çalışma Alanı</div>
+    </section>
+
+    <section class="panel stepper-panel">
+      <ol class="stepper" id="stepper">
+        <li class="step-chip active" data-step="0">
+          <span class="step-no">1</span>
+          <span class="step-name">Sistem</span>
+        </li>
+        <li class="step-chip" data-step="1">
+          <span class="step-no">2</span>
+          <span class="step-name">Geometri</span>
+        </li>
+        <li class="step-chip" data-step="2">
+          <span class="step-no">3</span>
+          <span class="step-name">Senaryolar</span>
+        </li>
+        <li class="step-chip" data-step="3">
+          <span class="step-no">4</span>
+          <span class="step-name">Sonuçlar</span>
+        </li>
+      </ol>
+    </section>
+
+    <section class="step-page active" data-page="0">
+      <section class="panel section site-launcher">
+        <div class="section-head">
+          <h2>Saha Seçimi</h2>
+          <span class="mono small">Ayrı pencere</span>
+        </div>
+        <p class="hint">Önce saha penceresini açın, konum seçin ve proje girdilerinden önce NASA/PVGIS verilerini çekin.</p>
+        <div class="button-row">
+          <button id="openSiteDataDialogBtn" class="btn primary" type="button">Saha Seçim Penceresini Aç</button>
+        </div>
+        <div id="siteQuickSummary" class="status">Henüz saha seçilmedi.</div>
+      </section>
+
+      <article class="panel section">
+        <h2>Proje Girdileri</h2>
+        <p class="hint">Geometri modellemeden önce panel boyutlarını ve enerji varsayımlarını girin.</p>
+        <div class="grid-2">
+          <label class="field"><span>Modül Genişliği W (m)</span><input id="panelWidth" type="number" step="0.001" value="1.134"></label>
+          <label class="field"><span>Modül Yüksekliği H (m)</span><input id="panelHeight" type="number" step="0.001" value="2.278"></label>
+          <label class="field"><span>Panel Satır Sayısı Nv (2V)</span><input id="panelCountX" type="number" step="1" min="1" max="20" value="2"></label>
+          <label class="field"><span>Panel Kolon Sayısı Nh (13H)</span><input id="panelCountY" type="number" step="1" min="1" max="20" value="13"></label>
+          <label class="field"><span>Eğim Açısı Theta (deg)</span><input id="tiltDeg" type="number" step="0.1" value="16"></label>
+          <label class="field"><span>Yerden Yükseklik C0 (m)</span><input id="groundClearance" type="number" step="0.01" value="0.7"></label>
+          <label class="field"><span>Ön Yüz Enerjisi Efront (kWh/yıl)</span><input id="frontEnergy" type="number" step="100" value="1000000"></label>
+          <label class="field"><span>İdeal Arka Kazanç Grear,ideal (%)</span><input id="idealGain" type="number" step="0.1" value="12"></label>
+          <label class="field"><span>Baz Arka Uyumsuzluk M0 (%)</span><input id="baseMismatch" type="number" step="0.1" value="10"></label>
+          <label class="field"><span>Uyumsuzluk Katsayısı Km</span><input id="mismatchFactor" type="number" step="1" value="35"></label>
+        </div>
+        <div class="section-head">
+          <h3>Panel Önizleme</h3>
+          <span class="mono small">Canlı ön görünüş</span>
+        </div>
+        <canvas id="panelPreviewCanvas" width="800" height="420" class="canvas"></canvas>
+        <div id="panelPreviewMeta" class="view-meta"></div>
+        <p class="caption">Önizleme panel boyutu, adet ve eğim girdileriyle canlı güncellenir.</p>
+      </article>
+    </section>
+
+    <section class="step-page construction-page" data-page="1">
+      <div class="split">
+        <article class="panel section">
+          <h2>Konstrüksiyon Geometrisi</h2>
+          <p class="hint">Normal kullanım için temel alanları kullanın. İnce ayar gerektiğinde yalnızca Gelişmiş alanını açın.</p>
+          <div class="grid-2">
+            <label class="field"><span>Aşık P Derinlik Zp (m)</span><input id="pDepth" type="number" step="0.001" value="0.04"></label>
+            <label class="field"><span>Aşık P Ofset Op (m)</span><input id="pOffset" type="number" step="0.001" value="0.06"></label>
+            <label class="field"><span>Aşık P Kenar Payı Ep (m)</span><input id="pMargin" type="number" step="0.001" value="0.15"></label>
+            <label class="field"><span>Sıra Aralığı S (m)</span><input id="rowPitch" type="number" step="0.01" value="6.4"></label>
+            <label class="field"><span>Masa Genişliği B (m)</span><input id="tableWidth" type="number" step="0.01" value="4.2"></label>
+            <label class="field"><span>Güneş Yüksekliği Alpha (deg)</span><input id="sunElevation" type="number" step="1" value="35"></label>
+            <label class="field"><span>Güneş Azimutu Gamma (deg)</span><input id="sunAzimuth" type="number" step="1" value="150"></label>
+          </div>
+          <details class="defs">
+            <summary>Gelişmiş Geometri Girdileri (opsiyonel)</summary>
+            <div class="grid-2">
+              <label class="field"><span>Aşık P Kalınlık Tp (m)</span><input id="pThick" type="number" step="0.001" value="0.05"></label>
+              <label class="field"><span>Çapraz X Kalınlık Tx (m)</span><input id="braceThick" type="number" step="0.001" value="0.03"></label>
+              <label class="field"><span>Çapraz X Segment Sayısı Nx</span><input id="braceSeg" type="number" step="1" value="22"></label>
+              <label class="field"><span>Çapraz X Z Başlangıç Zx1 (m)</span><input id="braceZStart" type="number" step="0.001" value="0.06"></label>
+              <label class="field"><span>Çapraz X Z Bitiş Zx2 (m)</span><input id="braceZEnd" type="number" step="0.001" value="0.18"></label>
+            </div>
+          </details>
+          <details class="defs">
+            <summary>Parametre Açıklamaları</summary>
+            <ul>
+              <li><strong>Aşık P Derinlik Zp:</strong> Aşık profilinin modül düzlemi arkasındaki derinliği.</li>
+              <li><strong>Aşık P Ofset Op:</strong> Modül arka düzlemi ile aşık eksen çizgisi arasındaki mesafe.</li>
+              <li><strong>Aşık P Kenar Payı Ep:</strong> Modül kenarından ilk/son aşık eksenine mesafe.</li>
+              <li><strong>Sıra Aralığı S:</strong> Komşu iki masa orta ekseni arasındaki mesafe.</li>
+              <li><strong>Masa Genişliği B:</strong> Tek bir masanın yatay izdüşüm toplam genişliği.</li>
+              <li><strong>Güneş Yüksekliği Alpha:</strong> Güneşin ufuk üzerindeki yükseklik açısı.</li>
+              <li><strong>Güneş Azimutu Gamma:</strong> Güneş pusula açısı (0 K, 90 D, 180 G).</li>
+              <li><strong>Gelişmiş (Tp, Tx, Nx, Zx1-Zx2):</strong> Yalnızca detay profil/çapraz ince ayarı için gerekir.</li>
+            </ul>
+          </details>
+          <div id="geomSummary" class="status">Geometri özeti: -</div>
+          <div id="geomLiveDetails" class="param-live" aria-live="polite"></div>
+        </article>
+
+        <article class="panel section">
+          <div class="viz-grid">
+            <div class="viz-card">
+              <div class="section-head"><h3>Arka Ön Görünüş</h3><span class="mono small">Canlı teknik çizim</span></div>
+              <canvas id="frontViewCanvas" width="760" height="260" class="canvas"></canvas>
+              <div id="frontMeta" class="view-meta"></div>
+            </div>
+            <div class="viz-card">
+              <div class="section-head"><h3>Yan Teknik Görünüş</h3><span class="mono small">Canlı teknik çizim</span></div>
+              <canvas id="sideViewCanvas" width="760" height="260" class="canvas"></canvas>
+              <div id="sideMeta" class="view-meta"></div>
+            </div>
+            <div class="viz-card">
+              <div class="section-head"><h3>Üst Montaj Görünüşü</h3><span class="mono small">Canlı teknik çizim</span></div>
+              <canvas id="topViewCanvas" width="760" height="260" class="canvas"></canvas>
+              <div id="topMeta" class="view-meta"></div>
+            </div>
+            <div class="viz-card">
+              <div class="section-head"><h3>İzometrik Taşıyıcı Görünüş</h3><span class="mono small">Yalancı 3B teknik çizim</span></div>
+              <canvas id="isoViewCanvas" width="760" height="260" class="canvas"></canvas>
+              <div id="isoMeta" class="view-meta"></div>
+            </div>
+          </div>
+          <div class="node-board-wrap">
+            <div class="section-head">
+              <h3>Yapısal Düğüm Detayları</h3>
+              <span class="mono small">Kolon / Kiriş / Aşık</span>
+            </div>
+            <div id="structureNodeBoard" class="node-board"></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="step-page" data-page="2">
+      <div class="split">
+        <article class="panel section">
+          <h2>Senaryo Oluşturucu</h2>
+          <p class="hint">Alternatifleri tanımlayın ve canlı teknik önizleme için birini seçin.</p>
+          <div id="scenarioList" class="scenario-list"></div>
+          <div class="button-row">
+            <button id="addScenarioBtn" class="btn secondary">Senaryo Ekle</button>
+            <button id="resetScenarioBtn" class="btn secondary">Varsayılanları Sıfırla</button>
+          </div>
+        </article>
+
+        <article class="panel section">
+          <div class="section-head">
+            <h2>Senaryo Teknik Önizleme</h2>
+            <span id="previewScenarioName" class="mono small">Arka taşıyıcı yok</span>
+          </div>
+          <canvas id="scenarioPreviewCanvas" width="800" height="500" class="canvas"></canvas>
+          <div class="legend">
+            <span><i class="swatch panel"></i>Panel alanı</span>
+            <span><i class="swatch purlin"></i>Aşıklar</span>
+            <span><i class="swatch brace"></i>Çaprazlar</span>
+            <span><i class="swatch shadow"></i>Yansıtılmış gölge</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="step-page" data-page="3">
+      <div class="split">
+        <article class="panel section">
+          <h2>Simülasyon Kontrolleri</h2>
+          <p class="hint">Hız ile sayısal kararlılık arasında denge kurun.</p>
+          <div class="grid-2">
+            <label class="field"><span>Panel Nokta Sayısı X</span><input id="pointsX" type="number" step="1" value="10"></label>
+            <label class="field"><span>Panel Nokta Sayısı Y</span><input id="pointsY" type="number" step="1" value="20"></label>
+            <label class="field"><span>Nokta Başına Işın</span><input id="raysPerPoint" type="number" step="50" value="600"></label>
+            <label class="field"><span>Tohum</span><input id="seed" type="number" step="1" value="42"></label>
+          </div>
+          <div class="button-row top">
+            <button id="runBtn" class="btn primary">Karşılaştırmayı Çalıştır</button>
+            <button id="downloadCsvBtn" class="btn secondary">CSV İndir</button>
+          </div>
+          <div class="report-box">
+            <div class="section-head">
+              <h3>Otomatik Rapor</h3>
+              <span class="mono small">PDF + HTML</span>
+            </div>
+            <p class="hint">Butona tıklayın, sistem raporu oluştursun ve hazır olduğunda indirme bağlantısı gelsin.</p>
+            <p class="hint">Not: Bu özellik için uygulamayı `python local_server.py --port 8000` ile çalıştırıp `http://127.0.0.1:8000/web/` adresinden açın. Rapor, premium HTML şablonundan A4 PDF olarak üretilir.</p>
+            <div class="grid-2">
+              <label class="field">
+                <span>Proje Adı</span>
+                <input id="reportProjectName" type="text" value="Eğimli ve Sert Zeminli GES">
+              </label>
+              <label class="field">
+                <span>Müşteri / Yatırımcı (Opsiyonel)</span>
+                <input id="reportClientName" type="text" placeholder="Örn: ABC Enerji Yatırımları">
+              </label>
+              <label class="field">
+                <span>Yazar (Kilitli)</span>
+                <input id="reportAuthor" type="text" value="Mustafa Ünal" readonly>
+              </label>
+            </div>
+            <div class="report-controls">
+              <label class="toggle">
+                <input id="reportAutoClean" type="checkbox" checked>
+                <span>Rapor öncesi eski çıktıları temizle</span>
+              </label>
+              <button id="cleanReportOutputsBtn" class="btn ghost" type="button">Eski Çıktıları Temizle</button>
+            </div>
+            <div class="button-row">
+              <button id="generateReportBtn" class="btn primary" type="button">Rapor Oluştur ve İndir</button>
+              <a id="downloadReportBtn" class="btn secondary" href="#" target="_blank" rel="noopener" hidden>Raporu Aç / İndir</a>
+            </div>
+            <div class="report-progress-wrap" aria-live="polite">
+              <div class="report-progress-track">
+                <div id="reportProgressBar" class="report-progress-fill" style="width: 0%"></div>
+              </div>
+              <div class="report-progress-meta">
+                <strong id="reportStepText">Bekliyor</strong>
+                <span id="reportProgressText" class="mono small">%0</span>
+              </div>
+            </div>
+            <div id="reportStatusLine" class="status">Henüz rapor oluşturulmadı.</div>
+          </div>
+          <div id="statusLine" class="status">Hazır.</div>
+        </article>
+
+        <article class="panel section">
+          <h2>Özet</h2>
+          <div class="metrics">
+            <div class="metric"><span>Referans</span><strong id="mRef">-</strong></div>
+            <div class="metric"><span>En İyi (kWh)</span><strong id="mBest">-</strong></div>
+            <div class="metric"><span>En Kötü (kWh)</span><strong id="mWorst">-</strong></div>
+            <div class="metric"><span>Fark (kWh)</span><strong id="mSpread">-</strong></div>
+          </div>
+          <div class="bar-wrap" id="bars"></div>
+        </article>
+      </div>
+
+      <section class="panel section">
+        <h2>Detaylı Karşılaştırma</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Senaryo</th>
+                <th>Aşık</th>
+                <th>Çapraz</th>
+                <th>ArkaBlok %</th>
+                <th>StdBlok %</th>
+                <th>Uyumsuzluk %</th>
+                <th>EtkiliArkaKazanç %</th>
+                <th>YıllıkToplam kWh</th>
+                <th>RefFark kWh</th>
+                <th>RefFark %</th>
+              </tr>
+            </thead>
+            <tbody id="resultBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <section class="panel nav-panel">
+      <button id="prevStepBtn" class="btn ghost" disabled>Önceki</button>
+      <div class="nav-center">
+        <span class="mono small">Adım</span>
+        <strong id="stepLabel">1 / 4</strong>
+      </div>
+      <button id="nextStepBtn" class="btn ghost">Sonraki</button>
+    </section>
+  </main>
+
+  <div id="siteDataModal" class="modal-overlay site-data-modal" hidden>
+    <div class="modal-card panel site-data-card" role="dialog" aria-modal="true" aria-labelledby="siteDataModalTitle">
+      <div class="modal-head">
+        <h3 id="siteDataModalTitle">Saha Seçimi</h3>
+        <button id="closeSiteDataModalBtn" class="icon-btn" type="button" aria-label="Saha seçim penceresini kapat">&times;</button>
+      </div>
+      <div class="site-data-scroll">
+        <div class="section-head">
+          <h2>Saha Konumu</h2>
+          <span class="mono small">Ayrı konum seçici</span>
+        </div>
+        <div class="grid-2">
+          <label class="field"><span>Enlem</span><input id="siteLat" type="number" step="0.0001" value="39.9208"></label>
+          <label class="field"><span>Boylam</span><input id="siteLon" type="number" step="0.0001" value="32.8541"></label>
+        </div>
+        <div class="button-row">
+          <button id="openSiteMapBtn" class="btn primary" type="button" onclick="window.__openSiteLocationModal && window.__openSiteLocationModal()">Haritada Konum Seç</button>
+          <button id="modalGoFromMainBtn" class="btn ghost" type="button">Koordinata Git</button>
+          <button id="useGpsBtn" class="btn ghost" type="button">Tarayıcı GPS Kullan</button>
+        </div>
+        <div id="siteStatus" class="status">Konum seçiciyi açın ve uydu haritasında bir noktaya tıklayın.</div>
+        <hr class="section-sep">
+        <div class="section-head">
+          <h2>Saha İklim Verisi</h2>
+          <span class="mono small">NASA POWER + PVGIS 5.2</span>
+        </div>
+        <div class="button-row">
+          <button id="fetchSiteDataBtn" class="btn secondary" type="button">NASA + PVGIS Getir</button>
+        </div>
+        <div class="metrics">
+          <div class="metric"><span>NASA Yıllık Albedo</span><strong id="annualAlbedo">-</strong></div>
+          <div class="metric"><span>PVGIS Yıllık GHI</span><strong id="annualGhi">-</strong></div>
+          <div class="metric"><span>Ort. Sıcaklık</span><strong id="avgTemp">-</strong></div>
+          <div class="metric"><span>Ort. Rüzgar Hızı</span><strong id="avgWind">-</strong></div>
+        </div>
+        <div class="section-head">
+          <h3>Aylık Albedo (NASA POWER)</h3>
+          <span class="mono small">ALLSKY_SRF_ALB</span>
+        </div>
+        <div id="albedoMonthly" class="month-grid"></div>
+        <div class="section-head">
+          <h3>Aylık İklim (PVGIS 5.2 TMY)</h3>
+          <span class="mono small">GHI / T2m / WS10m</span>
+        </div>
+        <div id="climateMonthly" class="month-grid climate"></div>
+        <div class="button-row">
+          <button id="doneSiteDataModalBtn" class="btn primary" type="button">Tamam</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="siteMapModal" class="modal-overlay" hidden onclick="window.forceCloseSiteModal && window.forceCloseSiteModal(event)">
+    <div class="modal-card panel" role="dialog" aria-modal="true" aria-labelledby="siteMapModalTitle">
+      <div class="modal-head">
+        <h3 id="siteMapModalTitle">Konum Seç</h3>
+        <button id="closeSiteMapBtn" class="icon-btn" type="button" aria-label="Konum seçiciyi kapat" onclick="window.forceCloseSiteModal && window.forceCloseSiteModal()">&times;</button>
+      </div>
+      <p class="hint">Harita üzerinde bir nokta seçin.</p>
+      <div class="modal-coords">
+        <input id="modalLat" type="number" step="0.000001" placeholder="Enlem">
+        <input id="modalLon" type="number" step="0.000001" placeholder="Boylam">
+        <button id="modalGoBtn" class="btn ghost" type="button">Git</button>
+      </div>
+      <div id="siteMap" class="site-map modal-map" aria-label="Enlem/boylam seçimi için uydu haritası"></div>
+      <div id="modalMapError" class="status"></div>
+      <div class="button-row">
+        <button id="cancelSiteMapBtn" class="btn ghost" type="button" onclick="window.forceCloseSiteModal && window.forceCloseSiteModal()">İptal</button>
+        <button id="applySiteMapBtn" class="btn primary" type="button">Konumu Uygula</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.forceCloseSiteModal = function (ev) {
+      var modal = document.getElementById("siteMapModal");
+      if (!modal) return;
+      if (ev && ev.target && ev.target !== modal) return;
+      modal.hidden = true;
+      modal.setAttribute("hidden", "hidden");
+      modal.style.display = "none";
+      modal.style.pointerEvents = "none";
+      document.body.classList.remove("modal-open");
+    };
+  </script>
+  <script src="./vendor/leaflet/leaflet.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

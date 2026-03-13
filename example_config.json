@@ -1,0 +1,57 @@
+{
+  "project": {
+    "name": "Bifacial Rear Support Comparison"
+  },
+  "panel": {
+    "width_m": 1.134,
+    "height_m": 2.278
+  },
+  "energy_model": {
+    "annual_front_energy_kwh": 1000000,
+    "ideal_bifacial_gain_pct": 12.0,
+    "base_rear_mismatch_pct": 10.0,
+    "mismatch_from_nonuniformity_factor": 35.0
+  },
+  "simulation": {
+    "panel_points_x": 10,
+    "panel_points_y": 20,
+    "rays_per_point": 600,
+    "seed": 42
+  },
+  "geometry_defaults": {
+    "purlin_depth_z_m": 0.04,
+    "purlin_thickness_y_m": 0.05,
+    "purlin_z_offset_m": 0.06,
+    "purlin_edge_margin_m": 0.15,
+    "purlin_overhang_x_m": 0.02,
+    "brace_thickness_m": 0.03,
+    "brace_z_start_m": 0.06,
+    "brace_z_end_m": 0.18,
+    "brace_edge_margin_m": 0.10,
+    "brace_segments": 22,
+    "brace_x_rel_positions": [0.35, 0.65]
+  },
+  "scenarios": [
+    {
+      "name": "No rear support",
+      "purlin_count": 0,
+      "cross_brace": false
+    },
+    {
+      "name": "2 rear purlins",
+      "purlin_count": 2,
+      "cross_brace": false
+    },
+    {
+      "name": "3 rear purlins",
+      "purlin_count": 3,
+      "cross_brace": false
+    },
+    {
+      "name": "2 purlins + cross brace",
+      "purlin_count": 2,
+      "cross_brace": true
+    }
+  ]
+}
+

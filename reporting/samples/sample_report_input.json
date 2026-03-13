@@ -1,0 +1,173 @@
+{
+  "metadata": {
+    "report_title": "Bifacial PV Mounting System Trade-Off Report",
+    "project_name": "Konya C&I Bifacial PV Plant",
+    "project_code": "KON-CI-2026-04",
+    "client_name": "Sample Energy Investments",
+    "prepared_by": "Mustafa Ünal",
+    "report_date": "2026-03-12",
+    "report_version": "2.0",
+    "currency": "USD"
+  },
+  "site": {
+    "site_name": "Konya, Turkiye",
+    "latitude": 37.8713,
+    "longitude": 32.4846,
+    "annual_albedo": 0.214,
+    "annual_ghi_kwh_m2": 1848,
+    "climate_note": "Semi-arid climate with strong summer irradiance and moderate winter diffuse component."
+  },
+  "executive_summary": "This report compares 2-purlin, 3-purlin and 4-purlin rear-support alternatives for bifacial PV. Results show that lower purlin count improves rear-side gain and energy output, while higher purlin count increases structural confidence and CAPEX. The recommended option balances annual yield advantage with acceptable structure risk and commercial efficiency.",
+  "decision_snapshot": "The recommended scenario is 2-purlin + brace due to balanced energy and structural profile.",
+  "methodology_overview": [
+    "Monte Carlo rear-side obstruction simulation was used to estimate bifacial shading impact.",
+    "NASA POWER and PVGIS climate/albedo context was integrated.",
+    "Scenario scoring combines energy, structure confidence and cost normalization."
+  ],
+  "data_sources": [
+    {
+      "name": "NASA POWER",
+      "provider": "NASA",
+      "url": "https://power.larc.nasa.gov/",
+      "retrieved_at": "2026-03-12T10:22:00Z",
+      "note": "Surface albedo context"
+    },
+    {
+      "name": "PVGIS TMY 5.2",
+      "provider": "European Commission JRC",
+      "url": "https://re.jrc.ec.europa.eu/",
+      "retrieved_at": "2026-03-12T10:22:10Z",
+      "note": "Irradiance and weather baseline"
+    }
+  ],
+  "assumptions": [
+    {
+      "title": "Modeling simplification",
+      "value": "Support members are approximated with box geometry for rear-side obstruction analysis.",
+      "confidence": "high"
+    },
+    {
+      "title": "Cost baseline",
+      "value": "Base structure CAPEX and purlin uplift assumptions are indicative and project-specific.",
+      "confidence": "medium"
+    }
+  ],
+  "scenarios": [
+    {
+      "scenario_id": "s2",
+      "label": "2-Purlin",
+      "purlin_count": 2,
+      "cross_brace": false,
+      "annual_total_kwh": 1096925,
+      "annual_rear_kwh": 96925,
+      "effective_rear_gain_pct": 9.69,
+      "rear_blockage_pct": 6.5,
+      "rear_blockage_std_pct": 10.34,
+      "mismatch_pct": 13.62,
+      "structural_confidence_score": 74.5,
+      "structure_cost": 452000,
+      "capex_delta_vs_ref": 0,
+      "delta_kwh_vs_ref": 0,
+      "delta_pct_vs_ref": 0,
+      "decision_score": 83.1,
+      "engineering_notes": [
+        "Lower backside shading footprint compared to higher purlin alternatives."
+      ],
+      "commercial_notes": [
+        "Reference CAPEX level."
+      ]
+    },
+    {
+      "scenario_id": "s2b",
+      "label": "2-Purlin + Cross Brace",
+      "purlin_count": 2,
+      "cross_brace": true,
+      "annual_total_kwh": 1082622,
+      "annual_rear_kwh": 82622,
+      "effective_rear_gain_pct": 8.26,
+      "rear_blockage_pct": 19.84,
+      "rear_blockage_std_pct": 11.73,
+      "mismatch_pct": 14.1,
+      "structural_confidence_score": 82.0,
+      "structure_cost": 464500,
+      "capex_delta_vs_ref": 12500,
+      "delta_kwh_vs_ref": -14303,
+      "delta_pct_vs_ref": -1.3,
+      "decision_score": 80.2,
+      "engineering_notes": [
+        "Improved frame stiffness and vibration comfort."
+      ],
+      "commercial_notes": [
+        "Moderate structure CAPEX uplift."
+      ]
+    },
+    {
+      "scenario_id": "s3",
+      "label": "3-Purlin",
+      "purlin_count": 3,
+      "cross_brace": false,
+      "annual_total_kwh": 1093217,
+      "annual_rear_kwh": 93217,
+      "effective_rear_gain_pct": 9.32,
+      "rear_blockage_pct": 9.93,
+      "rear_blockage_std_pct": 10.72,
+      "mismatch_pct": 13.75,
+      "structural_confidence_score": 84.0,
+      "structure_cost": 469500,
+      "capex_delta_vs_ref": 17500,
+      "delta_kwh_vs_ref": -3708,
+      "delta_pct_vs_ref": -0.34,
+      "decision_score": 84.6,
+      "engineering_notes": [
+        "Higher static margin relative to 2-purlin reference."
+      ],
+      "commercial_notes": [
+        "Incremental CAPEX uplift requires yield-offset validation."
+      ]
+    }
+  ],
+  "reference_scenario_id": "s2",
+  "uncertainty": [
+    {
+      "scenario_id": "s2",
+      "p50_kwh": 1096925,
+      "p90_kwh": 1093400,
+      "p10_kwh": 1100500,
+      "note": "Narrow uncertainty envelope"
+    },
+    {
+      "scenario_id": "s2b",
+      "p50_kwh": 1082622,
+      "p90_kwh": 1078700,
+      "p10_kwh": 1086600,
+      "note": "Higher spread due to stronger rear-side obstruction"
+    },
+    {
+      "scenario_id": "s3",
+      "p50_kwh": 1093217,
+      "p90_kwh": 1089700,
+      "p10_kwh": 1096900,
+      "note": "Moderate spread"
+    }
+  ],
+  "key_tradeoffs": [
+    "2-purlin has better rear-side gain and lower CAPEX but lower structural confidence proxy.",
+    "3-purlin improves structural confidence with modest energy penalty and CAPEX increase.",
+    "Cross-brace option improves structural behavior but can materially reduce rear-side gain."
+  ],
+  "recommendation": {
+    "recommended_scenario_id": "s3",
+    "summary": "3-purlin is recommended for this site profile due to balanced yield retention and stronger structural confidence.",
+    "rationale": [
+      "Energy loss versus 2-purlin remains limited while structure confidence increases materially.",
+      "Cost uplift is manageable under current CAPEX assumptions and likely acceptable for EPC risk control."
+    ],
+    "conditional_note": "If geotechnical verification confirms low structural risk, 2-purlin can be selected for maximum energy-driven return.",
+    "investor_takeaway": "3-purlin provides a more bankable risk-return balance for financing discussions."
+  },
+  "appendix_notes": [
+    "Detailed static checks are outside this report scope and should be completed by structural engineering.",
+    "Cost assumptions are indicative placeholders and must be updated with procurement quotations."
+  ],
+  "simulation_stdout": "Reference scenario: 2-Purlin\\nScenario summary table omitted for brevity."
+}

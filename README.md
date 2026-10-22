@@ -97,27 +97,17 @@ Key simplifications:
 
 So absolute values should be calibrated with measurement or detailed simulation, but scenario-to-scenario deltas are useful for design decisions.
 
-## Deploy to Railway (Production)
+## Deploy with Docker (Production)
 
-This repo is deployment-ready for Railway with Docker.
+The repository ships a `Dockerfile`; any Docker host runs it.
 
-### 1) Push to GitHub
-- commit your current branch
-- push to a GitHub repository
+```bash
+docker build -t bifacialreporter .
+docker run -d -p 8000:8000 -e PORT=8000 -v "$PWD/outputs:/app/outputs" bifacialreporter
+```
 
-### 2) Create Railway Project
-- Railway dashboard -> `New Project` -> `Deploy from GitHub Repo`
-- select this repository
-- Railway will detect `Dockerfile` and build it automatically
-
-### 3) Set Runtime
 - no custom start command needed (already in `Dockerfile`)
 - app binds with `--host 0.0.0.0 --port $PORT`
 - health endpoint: `/health`
-
-### 4) Generate Public URL
-- Service -> `Settings` -> `Networking` -> `Generate Domain`
-- open `https://<your-domain>/web/`
-
-### 5) (Optional) Persist outputs
-By default Railway filesystem is ephemeral. If you need to keep generated report files (`outputs/`), attach a persistent volume and map it to `/app/outputs`.
+- open `http://<host>:8000/web/`
+- generated report files live in `/app/outputs`; mount a volume there to keep them
